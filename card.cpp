@@ -1,7 +1,7 @@
 #include "card.h"
-#include <sys/time.h>
 using namespace std;
 
+//Default Constructor
 card::card()
 {
 	id = 0;
@@ -169,8 +169,7 @@ deck::deck()
 	array[49].insert(13, second);
 	array[50].insert(13, third);
 	array[51].insert(13, fourth);
-
-	
+    
 }
 
 bool deck::pop(card & to_use)
@@ -185,10 +184,12 @@ bool deck::pop(card & to_use)
    int toShuffle = rand() % cardsLeft;
    --cardsLeft;
     
-   card * temp = new card(array[toShuffle]);
-   to_use.copy(*temp);
+   card temp;
+   temp.copy(array[toShuffle]);
+   to_use.copy(temp);
    array[toShuffle].copy(array[cardsLeft]);
-   array[cardsLeft].copy(*temp);
+   array[cardsLeft].copy(temp);
+
    return true; 
    
 }

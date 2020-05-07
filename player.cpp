@@ -1,27 +1,33 @@
 #include "player.h"
 
-node::node(const card & to_add)
+//Copy Constructor. 
+node::node(const card & toAdd)
 {
-	to_use.copy(to_add);
+	toUse.copy(toAdd);
 	next = NULL;
 }
 
+//destructor.
 node::~node()
 {
-	if(next)
-		delete next;
 	next = NULL;
 }
 
 void node::display()const
 {
-	to_use.display();
+	toUse.display();
 	return;
 }
 
-node *& node::to_next() 
+node *& node::toNext() 
 {
 	return next;
+}
+
+void node::copyCard(card & destination)
+{
+    destination.copy(toUse);
+    return;
 }
 ////////////////////PLAYER/////////////////////////
 
@@ -32,17 +38,28 @@ player::player()
 
 player::~player()
 {
-	node * temp = rear->to_next();
-	rear->to_next() = NULL;
-	remove_all(temp);
+    if(!rear)
+        return;
+
+    else if(rear == rear->toNext()){
+        delete rear;
+        rear = NULL;
+    }
+
+    else{
+        node * temp = rear->toNext();
+        rear->toNext() = NULL;
+        removeAll(temp);
+        rear = NULL;
+    }
 }
 
-void player::remove_all(node *& rear)
+void player::removeAll(node *& rear)
 {
 	if(!rear)
 		return;
 
-	remove_all(rear->to_next());
+	removeAll(rear->toNext());
 
 	delete rear;
 	rear = NULL;
@@ -50,49 +67,73 @@ void player::remove_all(node *& rear)
 	return;
 }
 
-void player::enqueue(const card & to_add)
+void player::enqueue(const card & toAdd)
 {
 	if(!rear)
 	{
-		rear = new node(to_add);
-		rear->to_next() = rear;
+		rear = new node(toAdd);
+		rear->toNext() = rear;
 		return;
 	}
 
 	else
 	{
-		node * temp = rear->to_next();
-		rear->to_next() = new node(to_add);
-		rear = rear->to_next();
-		rear->to_next() = temp;
+		node * temp = rear->toNext();
+		rear->toNext() = new node(toAdd);
+		rear = rear->toNext();
+		rear->toNext() = temp;
 
 		return;
 	}
 		
 }
 
-int player::count_cards()const
+int player::countCards()const
 {
 	if(!rear)
 		return 0;
-	else if(rear == rear->to_next())
+	else if(rear == rear->toNext())
 		return 1;
 	else
 	{
-		node * temp = rear->to_next();
-		return count_cards(temp, rear);
+		node * temp = rear->toNext();
+		return countCards(temp, rear);
 	}
 }
 
-int player::count_cards(node * temp, node * rear)const
+int player::countCards(node * temp, node * rear)const
 {
 	int count = 0;
 
 	if(temp == rear)
 		return ++count;
 
-	count = count_cards(temp->to_next(), rear);
+	count = countCards(temp->toNext(), rear);
 
 	return ++count;
 	
+}
+
+bool player::dequeue(card & toTake)
+{
+    if(!rear)
+        return false;
+
+    else if(rear->toNext() == rear)
+    {
+        rear->copyCard(toTake);
+        delete rear;
+        rear = NULL;
+        return true;
+    }
+
+    else
+    {
+        node * temp = rear->toNext();
+        rear->toNext() = temp->toNext();
+        temp->copyCard(toTake);
+        delete temp;
+        temp = NULL;
+        return true;
+    }
 }

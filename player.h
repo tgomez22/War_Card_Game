@@ -1,29 +1,32 @@
 #include "card.h"
 
+//contains the data of one card
 class node
 {
 	public:
 		node(const card & to_add);
 		~node();
 		void display() const;
-		node *& to_next();
+		node *& toNext();
+        void copyCard(card & destination);
 	private:
-		card to_use;
+		card toUse;
 		node * next;
 };
 
-
+//Player has a queue of won cards from each round.
 class player
 {
 	public:
 		player();
 		~player();
 		void display();
-		void enqueue(const card & to_add);
-		int count_cards()const;
+		void enqueue(const card & toAdd);
+		int countCards()const;
+        bool dequeue(card & toTake);
 	private:
-		int count_cards(node * temp, node * rear)const;
-		void remove_all(node *& rear);
+		int countCards(node * temp, node * rear)const;
+		void removeAll(node *& rear);
 		node * rear;
 };
 

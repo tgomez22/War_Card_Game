@@ -3,7 +3,7 @@
 //Copy Constructor. 
 node::node(const card & toAdd)
 {
-	toUse.copy(toAdd);
+	toUse.copyFrom(toAdd);
 	next = NULL;
 }
 
@@ -26,7 +26,7 @@ node *& node::toNext()
 
 void node::copyCard(card & destination)
 {
-    destination.copy(toUse);
+    destination.copyFrom(toUse);
     return;
 }
 ////////////////////PLAYER/////////////////////////

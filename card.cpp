@@ -2,14 +2,18 @@
 using namespace std;
 
 //Default Constructor
-card::card()
+card::card(void)
 {
+
 	id = 0;
 	suit = NULL;
+
 }
 
+//Copy Constructor
 card::card(int toUse, char stoUse[])
 {
+    
 	id = toUse;
 
 	if(suit)
@@ -22,7 +26,8 @@ card::card(int toUse, char stoUse[])
 
 }
 
-card::~card()
+//Destructor
+card::~card(void)
 {
 	if(suit)
 		delete [] suit;
@@ -31,15 +36,17 @@ card::~card()
 
 }
 
-void card::display() const
+
+//Displays the value of a card.
+void card::display(void) const
 {
 	if(id > 1 && id < 11)
-	{
-		cout<<id<<" of "<<suit<<"."<<endl;
-	}	
+	    cout<<id<<" of "<<suit<<"."<<endl;
+	
 
 	else
 	{
+
 		if(id == 1)
 			cout<<"Ace";	
 
@@ -48,6 +55,7 @@ void card::display() const
 
 		else if(id == 12)
 			cout<<"Queen";
+
 		else
 			cout<<"King";
 
@@ -58,6 +66,11 @@ void card::display() const
 	return;
 }
 
+
+//Compares value of calling object against value of the argument.
+//Returns 1 if the calling object is of higher value.
+//Returns -1 if the argument is of higher value.
+//Returns 0 if a tie.
 int card::compare(const card & to_compare)
 {
 	if(id > to_compare.id)
@@ -68,8 +81,11 @@ int card::compare(const card & to_compare)
 		return 0;
 }
 
-void card::copy(const card & to_add)
+//Copies the argument into the current card. Deallocates dynamic memory
+//currently stored in card.
+void card::copyFrom(const card & to_add)
 {
+
 	if(suit)
 		delete [] suit;
 
@@ -79,14 +95,18 @@ void card::copy(const card & to_add)
 	id = to_add.id;
 
 	return;
+
 }
 
+
+//Setter for the card.
 void card::insert(int toUse, char * stoUse)
 {
 	id = toUse;
 
 	if(suit)
 		delete [] suit;
+
 	suit = new char[strlen(stoUse) + 1];
 	strcpy(suit, stoUse);
 
@@ -95,6 +115,8 @@ void card::insert(int toUse, char * stoUse)
 
 ////////////////////////////////////////////////////////////////////////////
 
+
+//Default constructor.
 deck::deck()
 {
 	cardsLeft = MAX;
@@ -103,7 +125,17 @@ deck::deck()
 	char second[] = "Diamonds";
 	char third[] = "Spades";
 	char fourth[] = "Clubs";
+    int j = 0; 
+    for(int i = 1; i < 14; ++i)
+    {
 
+            array[j].insert(i, first);
+            array[j + 1].insert(i, second);
+            array[j + 2].insert(i, third);
+            array[j + 3].insert(i, fourth);
+            j += 4;
+    }
+/*
 	array[0].insert(1, first);
 	array[1].insert(1, second);
 	array[2].insert(1, third);
@@ -169,9 +201,12 @@ deck::deck()
 	array[49].insert(13, second);
 	array[50].insert(13, third);
 	array[51].insert(13, fourth);
+    */
     
 }
 
+
+//
 bool deck::pop(card & to_use)
 {
     if(cardsLeft <= 0)
@@ -185,10 +220,10 @@ bool deck::pop(card & to_use)
    --cardsLeft;
     
    card temp;
-   temp.copy(array[toShuffle]);
-   to_use.copy(temp);
-   array[toShuffle].copy(array[cardsLeft]);
-   array[cardsLeft].copy(temp);
+   temp.copyFrom(array[toShuffle]);
+   to_use.copyFrom(temp);
+   array[toShuffle].copyFrom(array[cardsLeft]);
+   array[cardsLeft].copyFrom(temp);
 
    return true; 
    

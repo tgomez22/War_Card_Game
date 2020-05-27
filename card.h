@@ -5,6 +5,8 @@
 
 //Denotes normal deck of cards length, not including Jokers.
 const int MAX = 52;
+
+//Half of MAX.
 const int HALF = 26;
 
 #include <iostream>
@@ -18,20 +20,20 @@ class card
 {
 
 	public:
-		card();
+		card(void);
 		card(int toUse, char stoUse[]);
-		~card();
+		~card(void);
 
-		void display() const;
-		void copy(const card & to_add);	
+		void display(void) const;
+		void copyFrom(const card & to_add);	
 		void insert(int toUse, char * stoUse);
 		int compare(const card & to_compare);
 
 
 	private:
-
 		int id; //Int 1 - 13
 		char * suit; 
+
 };
 
 
@@ -39,12 +41,13 @@ class deck
 {
 
 	public:
-		deck();
-		~deck();
-		void display() const;
+		deck(void);
+		~deck(void);
+		void display(void) const;
 		bool pop(card & to_use);
 
 	private:
 		card array[MAX];
 		int cardsLeft;
+
 };
